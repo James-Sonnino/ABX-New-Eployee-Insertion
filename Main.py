@@ -14,7 +14,7 @@ headers = {
 response = requests.request("POST", url + "/login", headers=headers, json= {"username": "ABXAdmin","password": "temPassw0rd123$","isEulaConfirmed": "true"}, verify=False)
 token = response.json()["token"]
 
-#list pictures in folder
+#create a list of the pictures' names
 pictures = []
 for i in os.listdir():
     if "jpg" in i or "png" in i:
@@ -27,6 +27,7 @@ headers = {
 }
 for filename in pictures:
     with open(filename, 'rb') as file:
+        #the requests.request() function's kwarg "files" takes a dictionary of {'name': file-like-objects} for uploading a file 
         files = {"file": file}
         response = requests.request("POST", url + "/image/extract", headers=headers, files=files, verify=False).json()
         features = response["items"][0]["crops"][0]["features"]
